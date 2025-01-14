@@ -1,61 +1,65 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
 import PyPDF2
-import openai
 
 app = Flask(__name__)
+CORS(app)
 
-# OpenAI API key setup (Replace with your key)
-openai.api_key = "your-openai-api-key"
+# Global variable to store the extracted text
+pdf_text = ""
 
-# Route to upload and process the PDF
+# Serve the index.html file
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+# Endpoint to upload a PDF
 @app.route('/upload', methods=['POST'])
 def upload_pdf():
+    global pdf_text
     if 'pdf' not in request.files:
         return jsonify({"error": "No PDF file provided"}), 400
 
     pdf_file = request.files['pdf']
-    text_content = extract_text_from_pdf(pdf_file)
-    
-    # Save text content in memory or database for querying
-    with open("processed_text.txt", "w", encoding="utf-8") as f:
-        f.write(text_content)
-    
-    return jsonify({"message": "PDF uploaded and processed successfully!"})
+    pdf_text = extract_text_from_pdf(pdf_file)
 
-# Extract text from the uploaded PDF
+    if pdf_text:
+        return jsonify({"message": "PDF uploaded and processed successfully!"})
+    else:
+        return jsonify({"error": "Failed to process PDF"}), 500
+
+# Function to extract text from PDF
 def extract_text_from_pdf(pdf_file):
-    pdf_reader = PyPDF2.PdfReader(pdf_file)
-    text = ""
-    for page in pdf_reader.pages:
-        text += page.extract_text()
-    return text
+    try:
+        pdf_reader = PyPDF2.PdfReader(pdf_file)
+        text = ""
+        for page in pdf_reader.pages:
+            text += page.extract_text() + "\n"
+        return text
+    except Exception as e:
+        print(f"Error extracting text: {e}")
+        return None
 
-# Route to handle user queries
-@app.route('/query', methods=['POST'])
-def query_pdf():
+# Endpoint to search the PDF text
+@app.route('/search', methods=['POST'])
+def search_text():
+    global pdf_text
+    if not pdf_text:
+        return jsonify({"error": "No PDF has been uploaded yet"}), 400
+
     data = request.json
-    question = data.get('question', '')
+    query = data.get('query', '')
 
-    if not question:
-        return jsonify({"error": "No question provided"}), 400
+    if not query:
+        return jsonify({"error": "No query provided"}), 400
 
-    # Load the processed text
-    with open("processed_text.txt", "r", encoding="utf-8") as f:
-        text_content = f.read()
+    # Find paragraphs with the query
+    results = [para.strip() for para in pdf_text.split("\n\n") if query.lower() in para.lower()]
 
-    # Use OpenAI or another NLP model to find relevant answers
-    response = query_openai(text_content, question)
-    return jsonify({"answer": response})
-
-# Use OpenAI's GPT for semantic search
-def query_openai(text_content, question):
-    prompt = f"Here is the content of a book:\n\n{text_content}\n\nAnswer the following question based on the book:\n{question}"
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=prompt,
-        max_tokens=150
-    )
-    return response.choices[0].text.strip()
+    if results:
+        return jsonify({"results": results})
+    else:
+        return jsonify({"message": "No matching text found"}), 404
 
 if __name__ == '__main__':
     app.run(debug=True)

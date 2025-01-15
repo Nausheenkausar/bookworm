@@ -4,31 +4,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF Search App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input[type="file"], input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+            overflow-x: auto;
+        }
+        img {
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
 </head>
 <body>
-    <h1>Search in PDF</h1>
-    
-    <!-- Form to upload PDF and enter search query -->
-    <form action="/search" method="POST" enctype="multipart/form-data">
-        <label for="pdf">Upload PDF:</label>
-        <input type="file" name="pdf" required><br><br>
-        
-        <label for="query">Search Query:</label>
-        <input type="text" name="query" required><br><br>
-        
-        <input type="submit" value="Search">
+    <h1>PDF Search App</h1>
+    <form action="/search" method="post" enctype="multipart/form-data">
+        <label for="pdf">Upload a PDF:</label>
+        <input type="file" name="pdf" id="pdf" required>
+        <label for="query">Enter a keyword:</label>
+        <input type="text" name="query" id="query" required>
+        <button type="submit">Search</button>
     </form>
     
-    <!-- Display search results -->
     {% if results %}
         <h2>Search Results:</h2>
         <ul>
             {% for result in results %}
-                <li>{{ result }}</li>
+                <li>{{ result|safe }}</li> <!-- Use safe to render HTML tags like <pre> -->
             {% endfor %}
         </ul>
-    {% elif results is not none %}
-        <p>No results found.</p>
+    {% endif %}
+    
+    {% if images %}
+        <h2>Extracted Diagrams:</h2>
+        <div>
+            {% for image in images %}
+                <img src="{{ image }}" alt="Diagram">
+            {% endfor %}
+        </div>
     {% endif %}
 </body>
 </html>
+// new code//

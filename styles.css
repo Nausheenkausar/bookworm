@@ -83,3 +83,45 @@ h1 {
     width: 400px;
     height: 400px;
 }
+.sticky-note {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 250px;
+    height: 250px;
+    background-color: #fff5f8;
+    border: 1px solid #ff66b2;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    font-family: 'Arial', sans-serif;
+    font-size: 1rem;
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.sticky-note.maximized {
+    width: 400px;
+    height: 400px;
+}
+
+.note-header {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-minimize-maximize {
+    background: #ff66b2;
+    color: white;
+    border: none;
+    font-size: 1.2rem;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.btn-minimize-maximize:hover {
+    background: #ff3385;
+}

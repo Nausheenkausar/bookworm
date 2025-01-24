@@ -1,15 +1,25 @@
+/* Sticky Note Styling */
 .sticky-note {
     position: fixed;
     bottom: 20px;
     right: 20px;
     width: 250px;
     height: 250px;
-    background-color: #fff5f8;
+    background-color: #fff5f8; /* Light pink background */
     border: 1px solid #ff66b2;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 15px;
     border-radius: 10px;
     font-family: 'Arial', sans-serif;
+    font-size: 1rem;
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.sticky-note.expanded {
+    width: 400px;
+    height: 400px;
 }
 
 #noteArea {
@@ -35,7 +45,6 @@
 .btn-pink:hover {
     background-color: #ff3385;
 }
-
 
 /* Main content styling */
 h1 {
@@ -63,4 +72,14 @@ h1 {
         right: 0;
         border-radius: 0;
     }
+}
+
+/* Expand sticky note on click */
+.sticky-note:hover {
+    transform: scale(1.02);
+}
+
+.sticky-note:active {
+    width: 400px;
+    height: 400px;
 }

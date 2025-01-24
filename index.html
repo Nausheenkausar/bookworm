@@ -4,166 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF Search App</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            line-height: 1.6;
-        }
-        h1 {
-            color: #333;
-        }
-        form {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        input[type="file"], input[type="text"] {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            margin-bottom: 10px;
-        }
-        button {
-            background-color: #007BFF;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        ul {
-            padding-left: 20px;
-        }
-        li {
-            margin-bottom: 10px;
-        }
-        pre {
-            background: #f4f4f4;
-            padding: 10px;
-            border: 1px solid #ddd;
-            overflow-x: auto;
-        }
-        img {
-            margin-top: 10px;
-            border: 1px solid #ddd;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
-            display: block;
-            max-width: 100%;
-            height: auto;
-        }
-    </style>
-</head>
-<body>
-    <h1>PDF Search App</h1>
-    <form action="/search" method="post" enctype="multipart/form-data">
-        <label for="pdf">Upload a PDF:</label>
-        <input type="file" name="pdf" id="pdf" required>
-        <label for="query">Enter a keyword:</label>
-        <input type="text" name="query" id="query" required>
-        <button type="submit">Search</button>
-    </form>
-    
-    {% if results %}
-        <h2>Search Results:</h2>
-        <ul>
-            {% for result in results %}
-                <li>{{ result|safe }}</li> <!-- Use safe to render HTML tags like <pre> -->
-            {% endfor %}
-        </ul>
-    {% endif %}
-    
-    {% if images %}
-        <h2>Extracted Diagrams:</h2>
-        <div>
-            {% for image in images %}
-                <img src="{{ image }}" alt="Diagram">
-            {% endfor %}
-        </div>
-    {% endif %}
-</body>
-</html>
-// new code//
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Search Tool</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .container {
-            max-width: 800px;
-            margin-top: 50px;
-        }
-        .results-container {
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1 class="text-center mb-4">PDF Search Tool</h1>
-        <form action="/search" method="post" enctype="multipart/form-data" class="card p-4 shadow">
-            <div class="mb-3">
-                <input type="file" name="pdf" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <input type="text" name="query" class="form-control" placeholder="Enter keyword or question..." required>
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Search</button>
-        </form>
-
-        <div class="results-container mt-4">
-            {% if results %}
-                <h3 class="text-center">Search Results</h3>
-                <ul class="list-group">
-                    {% for result in results %}
-                        <li class="list-group-item">{{ result | safe }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-
-            {% if images %}
-                <h3 class="text-center mt-4">Extracted Images</h3>
-                <div class="d-flex flex-wrap justify-content-center">
-                    {% for img in images %}
-                        <img src="{{ img }}" class="img-thumbnail m-2" style="width: 150px;">
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
-//newst code//-----------------------------------------------------------------------------------------------------------------------------------------------------
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Search App</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-<body>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-<div class="main-content">
-    <h1>PDF Search App</h1>
-    <div class="search-container">
-        <form action="/search" method="post" enctype="multipart/form-data">
-            <input type="file" name="pdf" class="form-control mb-2" required>
-            <input type="text" name="query" class="form-control mb-2" placeholder="Enter search keyword..." required>
-            <button type="submit" class="btn btn-primary w-100">Search</button>
-        </form>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background: linear-gradient(to right, #95b7d8, #95b7d8);
+    }
+    .card {
+        border-radius: 15px;
+        background: #bcd8a7;
+    }
+</style>
+
+<body>
+    
+    <div class="container mt-4">
+        <div class="card shadow-lg p-4">
+            <h1><i class="fas fa-file-pdf"></i> PDF Search App</h1>
+
+
+            <form action="/search" method="post" enctype="multipart/form-data" class="mt-3">
+                <div class="mb-3">
+                    <input type="file" class="form-control" name="pdf" required>
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" name="query" placeholder="Enter search keyword..." required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Search</button>
+            </form>
+        </div>
     </div>
+    
+    <button id="toggleTheme" class="btn btn-dark">Dark Mode</button>
+
+<script>
+    document.getElementById('toggleTheme').addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+    });
+</script>
+
+<style>
+    .dark-mode {
+        background: #333;
+        color: white;
+    }
+</style>
+<button class="btn btn-pink rounded-circle position-fixed bottom-0 end-0 m-4" style="width: 60px; height: 60px;">
+    +
+</button>
+
 
     <!-- Sticky Note Section -->
     <div class="sticky-note">
@@ -188,12 +82,60 @@
         {% if images %}
             <h3>Extracted Images:</h3>
             {% for image in images %}
-                <img src="{{ image }}" class="img-thumbnail img-result" width="200">
+                <a href="{{ image }}" target="_blank">
+                    <img src="{{ image }}" class="img-thumbnail img-result" width="200">
+                </a>
                 <button class="btn btn-sm btn-secondary add-img-btn" data-src="{{ image }}">Add to Notes</button>
             {% endfor %}
         {% endif %}
     </div>
+    
+
+<div id="loadingSpinner" class="d-none text-center">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
 </div>
+
+<script>
+    document.querySelector('form').addEventListener('submit', () => {
+        document.getElementById('loadingSpinner').classList.remove('d-none');
+    });
+</script><script>
+    // Add extracted text to the note area when clicking 'Add to Notes'
+    document.querySelectorAll('.add-text-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const content = this.previousElementSibling.textContent.trim();
+            const noteArea = document.getElementById('noteArea');
+            noteArea.value += content + "\n"; // Append text to textarea
+        });
+    });
+
+    // Add extracted images to the note area with clickable preview
+    document.querySelectorAll('.add-img-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const imgSrc = this.getAttribute('data-src');
+            const addedContent = document.getElementById('addedContent');
+
+            // Create clickable image element
+            const imgElement = document.createElement('img');
+            imgElement.src = imgSrc;
+            imgElement.classList.add('img-thumbnail', 'note-img');
+            imgElement.style.width = '100px';
+            imgElement.style.cursor = 'pointer';
+            
+            // Clicking the image opens it in a new tab
+            imgElement.addEventListener('click', function() {
+                window.open(imgSrc, '_blank');
+            });
+
+            addedContent.appendChild(imgElement);
+        });
+    });
+</script>
+
+
+
 
 <script>
     // Add search text to the note section
@@ -203,7 +145,7 @@
             document.getElementById('addedContent').innerHTML += `<p>${content}</p>`;
         });
     });
-
+    
     // Add image to the note section
     document.querySelectorAll('.add-img-btn').forEach(btn => {
         btn.addEventListener('click', function() {
@@ -232,7 +174,15 @@
             alert('Please enter some text.');
         }
     });
+    document.querySelectorAll('.img-result').forEach(img => {
+    img.addEventListener('click', function() {
+        window.open(this.src, '_blank');
+    });
+});
+
 </script>
+
 
 </body>
 </html>
+

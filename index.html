@@ -65,6 +65,15 @@
         <textarea id="noteAreaSticky" class="form-control" placeholder="Write your notes here..."></textarea>
         <div id="addedContent" class="mt-3"></div>
     </div>
+    <div class="sticky-note" id="stickyNote">
+        <div class="note-header">
+            <button id="toggleSizeBtn" class="btn-minimize-maximize">⬆</button>
+        </div>
+        <textarea id="noteArea" class="form-control" placeholder="Write your notes here..."></textarea>
+        <button id="saveNoteBtn" class="btn-pink w-100 mt-2">Add Note</button>
+        <div id="addedContent" class="mt-3"></div>
+    </div>
+    
 
     <div id="searchResults" class="mt-4">
         {% if results %}
@@ -153,6 +162,17 @@
             document.getElementById('addedContent').innerHTML += `<img src="${imgSrc}" class="img-thumbnail" width="100">`;
         });
     });
+    document.getElementById('toggleSizeBtn').addEventListener('click', () => {
+    const stickyNote = document.getElementById('stickyNote');
+    stickyNote.classList.toggle('maximized');
+
+    const btn = document.getElementById('toggleSizeBtn');
+    if (stickyNote.classList.contains('maximized')) {
+        btn.innerHTML = '⬇'; // Change to minimize icon
+    } else {
+        btn.innerHTML = '⬆'; // Change to maximize icon
+    }
+});
 
     // Save Note Functionality
     document.getElementById('saveNoteBtn').addEventListener('click', function() {
@@ -185,4 +205,7 @@
 
 </body>
 </html>
+
+
+
 
